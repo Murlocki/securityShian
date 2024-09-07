@@ -57,10 +57,93 @@ void generateTask1() {
 }
 
 
+//Задание 2
+//Проверка произведения цифр
+bool checkDigitsMult(int number) {
+    int mult = 1;
+    do {
+        mult = mult * (number % 10);
+        number = number / 10;
+    } while (number > 0);
+    if (mult == 243) return true;
+    return false;
+}
+//Проверка на простоту
+bool checkSimplinest(int number) {
+    if (number == 0 || number == 1) return false;
 
+    for (int i = 2; i <= number / 2; i++) {
+        if (number % i == 0) return false;
+    }
+    return true;
+}
 
+void generateTask2() {
+    ofstream outputFile;
+    outputFile.open("output2.txt");
+    
+    int counter = 0;
+    vector<int>numbers;
+    for (int i = 1000; i < 10000; i++) {
+        if (checkDigitsMult(i) && checkSimplinest(i)) {
+            counter += 1;
+            numbers.push_back(i);
+        }
+    }
+    outputFile << counter << endl;
+    for (int i = 0; i < numbers.size(); i++) {
+        outputFile << numbers[i]<<" ";
+    }
+    outputFile.close();
+}
+
+void generateTask2Smart() {
+
+    int counter = 0;
+    vector<string>numbers;
+    //Есть только 1 вариант с возможными простыми числами и произведением в 243 - число с цифрами 1 3 9 9
+   
+        int onePos = 0;
+        do {
+            int threePos = 0;
+            do {
+                if (onePos == threePos) {
+                    threePos += 1;
+                    continue;
+                }
+                string result = "9999";
+                result = result.replace(onePos, 1, "1");
+                result = result.replace(threePos, 1, "3");
+                if (checkSimplinest(atof(result.c_str()))) {
+                    counter += 1;
+                    numbers.push_back(result);
+                }
+                threePos += 1;
+            } while (threePos < 4);
+            onePos += 1;
+        } while (onePos < 4);
+
+    //Вывод в файл
+    ofstream outputFile;
+    outputFile.open("output3.txt");
+    outputFile << counter << endl;
+    for (int i = 0; i < numbers.size(); i++) {
+        outputFile << numbers[i] << " ";
+    }
+    outputFile.close();
+}
 int main()
 {
     generateTask1();
+    generateTask2();
+    generateTask2Smart();
 }
+
+//243=3^5
+//1399
+//1993
+//3919
+//9139
+//9391
+//9931
 
